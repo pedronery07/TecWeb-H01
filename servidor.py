@@ -1,6 +1,6 @@
 import socket
 from pathlib import Path
-from utils import extract_route, read_file
+from utils import extract_route, read_file, build_response
 from views import index
 
 CUR_DIR = Path(__file__).parent
@@ -26,7 +26,9 @@ while True:
     if filepath.is_file():
         response = read_file(filepath)
     elif route == '':
-        response = index()
+        if request.split()[0] == 'POST' and len(request.split("\n\n")) == 1:
+            request += client_connection.recv(1024).decode()
+        response = index(request)
     else:
         response = bytes()
 
