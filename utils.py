@@ -30,5 +30,7 @@ def add_note(params):
     with open("data/notes.json", "w") as file:
         json.dump(dados, file)
 
-def build_response():
-    pass
+def build_response(body='', code=200, reason="OK", headers=''):
+    if code == 302:
+        return f'HTTP/1.1 {code} {reason}\n{headers}\n\n{body}'.encode()
+    return f'HTTP/1.1 {code} {reason}\n{headers}\n{body}'.encode()

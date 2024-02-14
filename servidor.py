@@ -24,15 +24,15 @@ while True:
     route = extract_route(request)
     filepath = CUR_DIR / route
     if filepath.is_file():
-        response = read_file(filepath)
+        response = build_response() + read_file(filepath)
     elif route == '':
         if request.split()[0] == 'POST' and len(request.split("\n\n")) == 1:
             request += client_connection.recv(1024).decode()
         response = index(request)
     else:
-        response = bytes()
+        response = build_response()
 
-    client_connection.sendall('HTTP/1.1 200 OK\n\n'.encode() + response)
+    client_connection.sendall(response)
 
     client_connection.close()
 

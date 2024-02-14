@@ -1,4 +1,4 @@
-from utils import load_data, load_template, add_note
+from utils import load_data, load_template, add_note, build_response
 from urllib import parse
 
 def index(request):
@@ -25,6 +25,8 @@ def index(request):
                 params["título"] = key
         add_note(params)
 
+        return build_response(code=303, reason='See Other', headers='Location: /')
+
     # Cria uma lista de <li>'s para cada anotação
     # Se tiver curiosidade: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
     note_template = load_template('components/note.html')
@@ -34,4 +36,4 @@ def index(request):
     ]
     notes = '\n'.join(notes_li)
 
-    return load_template('index.html').format(notes=notes).encode()
+    return build_response() + load_template('index.html').format(notes=notes).encode()
